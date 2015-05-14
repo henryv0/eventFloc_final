@@ -22,8 +22,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,7 +29,6 @@ import java.util.Date;
 
 import application.floc.event.eventfloc.DatabaseQueries;
 import application.floc.event.eventfloc.EventsClasses.Event;
-import application.floc.event.eventfloc.EventsClasses.HasCategory;
 import application.floc.event.eventfloc.EventsClasses.Society;
 import application.floc.event.eventfloc.MainActivity;
 import application.floc.event.eventfloc.R;
@@ -324,10 +321,11 @@ public class AddActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        /*noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+        */
 
         if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
@@ -383,6 +381,7 @@ public class AddActivity extends ActionBarActivity {
         Date startTime = inputParse.parse(String.valueOf(mEventStart));
         Log.d("FILLING EVENT START", startTime.toString());
         e.setEventStartTime(startTime);
+        //
 
         //if there is an end event time set, then parse the date
         if(mEventEnd != null){

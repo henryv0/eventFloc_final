@@ -1,25 +1,24 @@
 package application.floc.event.eventfloc.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import application.floc.event.eventfloc.Adapters.eventItemAdapter;
 import application.floc.event.eventfloc.DatabaseQueries;
 import application.floc.event.eventfloc.EventsClasses.Event;
-import application.floc.event.eventfloc.MainActivity;
 import application.floc.event.eventfloc.R;
 
 /**
@@ -69,11 +68,11 @@ public class CategoryActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = lv1.getItemAtPosition(position);
                 Event e = (Event) o;
-                Intent i = new Intent(CategoryActivity.this, EventItemActivity.class);
+                // Intent i = new Intent(CategoryActivity.this, EventItemActivity.class);
                 Toast.makeText(CategoryActivity.this, "This event starts at " + parseTime.format(e.getEventStartTime()), Toast.LENGTH_LONG).show();
                 Log.d("EVENT HAS", e.getEventName());
                 Log.d(" EVENT ID", String.valueOf(e.getEventID()));
-                i.putExtra(EXTRA_EVENT_ID, e.getEventID() + "");
+                // i.putExtra(EXTRA_EVENT_ID, e.getEventID() + "");
 
                // startActivity(i);
 
@@ -81,7 +80,70 @@ public class CategoryActivity extends ActionBarActivity {
             }
         });
 
+        lv1.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
+            DatabaseQueries dq = new DatabaseQueries(CategoryActivity.this);
+
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> arg0, View arg1,
+                                           final int position, long arg3) {
+
+                Object o = lv1.getItemAtPosition(position);
+                final Event e = (Event) o;
+
+                //Toast.makeText(CategoryActivity.this, "Delete " + parseTime.format(e.getEventStartTime()), Toast.LENGTH_SHORT).show();
+
+
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(CategoryActivity.this);
+                alert.setMessage("Are you sure you want to delete this \"" + e.getEventName() +"\" ?");
+                Log.d("asdasd", "" + e.getEventID());
+                alert.setCancelable(false);
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("sdgthrjh", "" + e.getEventID());
+                        dq.deleteEvent(e.getEventID());
+
+                        //remove the item on the list and refresh the list
+
+                       lv1.invalidateViews();
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                });
+
+                alert.show();
+
+
+                return true;
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if(id== R.id.action_add) {
+            Intent i = new Intent(this, CategoryActivity.class);
+            startActivity(i);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

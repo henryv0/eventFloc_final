@@ -2,6 +2,7 @@ package application.floc.event.eventfloc;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,11 +18,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import application.floc.event.eventfloc.Activities.LoginActivity;
+import application.floc.event.eventfloc.Activities.MyEventsActivity;
+import application.floc.event.eventfloc.Activities.SettingsActivity;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements InfoAdapter.ClickListener {
 
     private RecyclerView recyclerView;
     private static final String PREF_FILE_NAME = "testpref";
@@ -57,6 +62,8 @@ public class NavigationDrawerFragment extends Fragment {
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
         adapter = new InfoAdapter(getActivity(), getData());
+        adapter.setClickListener(this);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -65,8 +72,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static List<Information> getData() {
         List<Information> data = new ArrayList<>();
-        int[] icons = {R.drawable.ic_launcher,R.drawable.ic_launcher,R.drawable.ic_launcher,R.drawable.ic_launcher};
-        String[] titles = {"Browse Events", "My Events", "Settings", "Log out"};
+        int[] icons = {R.drawable.ic_nav_home,R.drawable.ic_nav_myevents,R.drawable.ic_nav_settings,R.drawable.ic_action_name};
+        String[] titles = {"Home", "My Events", "Settings", "Log out"};
         for(int i=0; i<titles.length && i<icons.length; i++) {
             Information info = new Information();
             info.iconId = icons[i];
@@ -124,5 +131,32 @@ public class NavigationDrawerFragment extends Fragment {
     public static String readFromPreferences(Context context, String preferenceName, String defaultValue) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(preferenceName,defaultValue);
+    }
+
+    @Override
+    public void itemClicked(View view, int position) {
+        //startActivity(new Intent(getActivity(), LoginActivity.class));
+
+        Intent intent = null;
+        switch(position) {
+            case 0:
+                intent = new Intent(getActivity(), MainActivity.class);
+                break;
+            case 1:
+                intent = new Intent(getActivity(), MyEventsActivity.class);
+                break;
+            case 2:
+                intent = new Intent(getActivity(), SettingsActivity.class);
+                break;
+            case 3:
+                intent = new Intent(getActivity(), LoginActivity.class);
+                break;
+            default :
+                intent = new Intent(getActivity(), MainActivity.class); // Activity_0 as default
+                break;
+        }
+
+        startActivity(intent);
+
     }
 }

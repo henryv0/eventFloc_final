@@ -9,7 +9,6 @@ import android.util.Log;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
-import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
@@ -373,8 +372,6 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         ContentValues cv1 = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * from " + TABLE_EVENT +" order by " + EVENT_ID + " DESC limit 1";
-        Cursor c = db.rawQuery(query, null);
-
 
 
         cv.put(EVENT_NAME, event.getEventName());
@@ -389,13 +386,16 @@ public class DatabaseQueries extends SQLiteOpenHelper {
             cv.put(EVENT_END_TIME, parseTime.format(event.getEventEndTime()));
         }
 
+
+        db.insert(TABLE_EVENT, null, cv);
+        Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         int eventId = Integer.parseInt(c.getString(0));
         cv1.put(EVENT_ID, eventId);
         Log.d("INSERT EVENT", "" + eventId);
 
 
-        db.insert(TABLE_EVENT, null, cv);
+
 
 
         //CREATE A NEW HAS COMPOSITE THING TO KEEP THE EVENT TYPES
@@ -595,30 +595,35 @@ public class DatabaseQueries extends SQLiteOpenHelper {
      */
     public boolean deleteEvent(int eventID) {
         boolean result = false;
-        String query = "SELECT * from " + TABLE_EVENT + " where " + EVENT_ID + " = \""
+        String query = "DELETE from " + TABLE_EVENT + " where " + EVENT_ID + " = \""
                 + eventID + "\";";
 
 
+
         //SQL statement to delete comments on the event
-        String queryComments = "DELETE FROM " + TABLE_COMMENT + " where " + COMMENT_EVENT_ID + " = " + eventID + ";";
+       // String queryComments = "DELETE FROM " + TABLE_COMMENT + " where " + COMMENT_EVENT_ID + " = " + eventID + ";";
         //SQL statement to delete related has category rows
-        String queryHasCategory = "DELETE FROM " + TABLE_HAS_CATEGORY + " where " + HAS_EVENT_ID + " = " + eventID + ";";
+        //String queryHasCategory = "DELETE FROM " + TABLE_HAS_CATEGORY + " where " + HAS_EVENT_ID + " = " + eventID + ";";
 
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        Event event = new Event();
 
-        if (cursor.moveToFirst()) {
+
+        //Cursor cursor = db.rawQuery(query, null);
+        //Event event = new Event();
+
+        /*if (cursor.moveToFirst()) {
             event.setEventID(Integer.parseInt(cursor.getString(0)));
             db.delete(TABLE_EVENT, EVENT_ID + " = ?",
                     new String[]{String.valueOf(event.getEventID())});
             cursor.close();
 
             //Also delete all comments and has category on the event
-            db.execSQL(queryComments);
-            db.execSQL(queryHasCategory);
+           // db.execSQL(queryComments);
+            //db.execSQL(queryHasCategory);
         }
+        */
+        db.execSQL(query);
         db.close();
         return result;
     }

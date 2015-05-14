@@ -97,4 +97,8 @@ public class eventItemAdapter extends BaseAdapter{
 
     }
 
+    public void remove(int position){
+        //REMOVE THE ITEM HERE
+    }
+
 }

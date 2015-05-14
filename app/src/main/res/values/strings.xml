@@ -81,4 +81,7 @@
         <item>Political</item>
 
     </string-array>
+    <string name="title_activity_my_events">MyEventsActivity</string>
+    <string name="title_activity_myevents">My Events</string>
+    <string name="title_activity_category">Events</string>
 </resources>

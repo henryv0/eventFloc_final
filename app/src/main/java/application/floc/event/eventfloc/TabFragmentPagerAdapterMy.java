@@ -6,23 +6,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import application.floc.event.eventfloc.Fragments.EndingFragment;
-import application.floc.event.eventfloc.Fragments.ExploreFragment;
+import application.floc.event.eventfloc.Fragments.FeedFragment;
+import application.floc.event.eventfloc.Fragments.NewestFragment;
 import application.floc.event.eventfloc.Fragments.SocietiesFragment;
 
 /**
- * Created by henryvo on 9/05/15.
+ * Created by henryvo on 14/05/15.
  */
-public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[]{"Explore", "All", "Societies"};
+public class TabFragmentPagerAdapterMy extends FragmentPagerAdapter {
+    final int PAGE_COUNT = 4;
+    private String tabTitles[] = new String[]{"Feed", "Coming", "Maybe", "Past"};
     private Context context;
     private Fragment[] mFragments = {
-            new ExploreFragment(),
+            new FeedFragment(),
+            new SocietiesFragment(),
             new EndingFragment(),
-            new SocietiesFragment()
+            new NewestFragment()
     };
 
-    public TabFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public TabFragmentPagerAdapterMy(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }
@@ -38,14 +40,17 @@ public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                ExploreFragment fragment1 = new ExploreFragment();
+                FeedFragment fragment1 = new FeedFragment();
                 return fragment1;
             case 1:
-                EndingFragment fragment2 = new EndingFragment();
+                SocietiesFragment fragment2 = new SocietiesFragment();
                 return fragment2;
             case 2:
-                SocietiesFragment fragment3 = new SocietiesFragment();
+                EndingFragment fragment3 = new EndingFragment();
                 return fragment3;
+            case 3:
+                NewestFragment fragment4 = new NewestFragment();
+                return fragment4;
             default:
                 return null;
         }
